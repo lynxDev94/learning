@@ -1,25 +1,6 @@
-import { z } from "zod";
 import { useForm, type FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const signUpSchema = z
-  .object({
-    email: z.string().email(),
-    password: z
-      .string()
-      .min(10, "Password must be at least 10 characters long"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password == data.confirmPassword, {
-    message: "Password must match",
-    path: ["confirmPassword"],
-  });
-
-// type FormValues = {
-//   password: string;
-//   confirmPassword: string;
-//   email: string;
-// };
+import { type TSignUpSchema, signUpSchema } from "../../lib/types";
 
 function FormWithRHF() {
   const {
@@ -27,7 +8,7 @@ function FormWithRHF() {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm({
+  } = useForm<TSignUpSchema>({
     resolver: zodResolver(signUpSchema),
   });
 
