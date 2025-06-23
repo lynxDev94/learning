@@ -1,12 +1,10 @@
 import { useForm, type FieldValues } from "react-hook-form";
 
-
-
 type FormValues = {
-  password: string
-  confirmPassword: string,
-  email: string
-}
+  password: string;
+  confirmPassword: string;
+  email: string;
+};
 
 function FormWithRHF() {
   const {
@@ -23,7 +21,7 @@ function FormWithRHF() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     reset();
   };
-console.log(errors);
+  console.log(errors);
   return (
     <>
       <form
@@ -38,9 +36,7 @@ console.log(errors);
           placeholder="Email"
           className="border-black border-2 m-2 p-2"
         />
-        {errors.email && (
-          <p>{errors.email.message}</p>
-        )}
+        {errors.email && <p>{errors.email.message}</p>}
         <input
           {...register("password", {
             required: "Password is required",
@@ -53,16 +49,20 @@ console.log(errors);
           placeholder="Password"
           className="border-black border-2 m-2 p-2"
         />
+        {errors.password && <p>{errors.password.message}</p>}
         <input
           {...register("confirmPassword", {
-            required: "Confirm password is Rquired",
+            required: "Confirm password is Required",
+            validate: (value) =>
+              value == getValues("password") || "passwords need to match",
           })}
           type="password"
           placeholder="Confirm Password"
           className="border-black border-2 m-2 p-2"
         />
+        {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
         <button
-        disabled={isSubmitting}
+          disabled={isSubmitting}
           type="submit"
           className={` ${isSubmitting ? "bg-amber-400" : "bg-red-500"}`}
         >
