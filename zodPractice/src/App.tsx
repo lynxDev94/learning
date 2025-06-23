@@ -6,6 +6,7 @@ function App() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const handleOnChangeEvent = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -18,9 +19,18 @@ function App() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // send to the server
+    if (password !== confirmPassword) {
+      setErrors(["Your passwords do not match"]);
+      setIsSubmitting(false);
+      return;
+    }
+
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitting(false);
+    setEmail("");
+    setErrors([]);
+    setPassword("");
+    setConfirmPassword("");
   };
 
   return (
@@ -29,6 +39,13 @@ function App() {
         onSubmit={handleSubmit}
         className="flex flex-col justify-center items-center"
       >
+        {errors.length >= 0 && (
+          <ul>
+            {errors.map((error) => (
+              <li>{error}</li>
+            ))}
+          </ul>
+        )}
         <input
           value={email}
           required
@@ -53,7 +70,13 @@ function App() {
           placeholder="Confirm Password"
           className="border-black border-2 m-2 p-2"
         />
-        <button type="submit" disabled={isSubmitting}>Submit</button>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className={` ${isSubmitting ? "bg-amber-400" : "bg-red-500"}`}
+        >
+          Submit
+        </button>
       </form>
     </>
   );
